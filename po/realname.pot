@@ -5,7 +5,7 @@
 # Generated from files:
 #  realname_theme.inc,v 1.2.2.8 2008/11/12 17:43:26 nancyw
 #  token_realname.inc,v 1.1.4.7 2008/11/12 17:43:26 nancyw
-#  realname.module,v 1.4.2.23 2008/11/14 15:46:39 nancyw
+#  realname.module,v 1.4.2.25 2008/12/30 21:30:19 nancyw
 #  realname.info,v 1.1 2008/06/03 19:43:14 nancyw
 #  realname.install,v 1.4.2.1 2008/11/11 18:03:40 nancyw
 #
@@ -13,7 +13,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2008-11-30 15:27-0500\n"
+"POT-Creation-Date: 2009-01-01 14:36-0500\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -74,79 +74,79 @@ msgstr ""
 msgid "Bypass Forms"
 msgstr ""
 
-#: realname.module:328
+#: realname.module:325
 msgid "<strong>WARNING</strong>: This form may cause errors if the instructions below are not followed or if you give an invalid form name or field name. Please do not remove the \"comment_form\" line."
 msgstr ""
 
-#: realname.module:333;342
+#: realname.module:330;339
 msgid "Bypass these forms"
 msgstr ""
 
-#: realname.module:336
+#: realname.module:333
 msgid "Enter one form per line. Each line should start with the form name. That should be followed by the name of the field to be reset to the username. If the field is a child field, include its full parent path, separated by spaces. For example: mymodule_form fieldset_1 fieldset_2 name"
 msgstr ""
 
-#: realname.module:361
+#: realname.module:358
 msgid "Information saved for !count forms."
 msgstr ""
 
-#: realname.module:438
+#: realname.module:435
 msgid "Name Pattern"
 msgstr ""
 
-#: realname.module:439
+#: realname.module:436
 msgid "The determines how the fields will be used to create the \"Real name.\" Use \"%1\" to refer to the first field, \"%2\" to refer to the second, etc.."
 msgstr ""
 
-#: realname.module:446
+#: realname.module:443
 msgid "Override username theme"
 msgstr ""
 
-#: realname.module:447
+#: realname.module:444
 msgid "If this option is selected, the standard username theme function will be overriden to use the \"Real name.\""
 msgstr ""
 
-#: realname.module:453
+#: realname.module:450
 msgid "Show realname in nodes"
 msgstr ""
 
-#: realname.module:454
+#: realname.module:451
 msgid "If this option is selected, the \"Real name\" will be used on node displays."
 msgstr ""
 
-#: realname.module:460
+#: realname.module:457
 msgid "Show \"Not verified\" for anonymous users"
 msgstr ""
 
-#: realname.module:461
+#: realname.module:458
 msgid "Drupal core adds \"Not verified\" for anonymous users, this option allows that to be turned off."
 msgstr ""
 
-#: realname.module:467
+#: realname.module:464
 msgid ""
 msgstr ""
 
-#: realname.module:472
+#: realname.module:469
 msgid "Link to homepage"
 msgstr ""
 
-#: realname.module:473
+#: realname.module:470
 msgid "There were URL fields in the profile. If one of these is a personal homepage link, you may choose to link to it rather than the user profile. Choose which field to use."
 msgstr ""
 
-#: realname.module:479
+#: realname.module:476
 msgid "Spam link deterrent"
 msgstr ""
 
-#: realname.module:480
+#: realname.module:477
 msgid "If enabled, Drupal will add rel=\"nofollow\" to all links, as a measure to reduce the effectiveness of spam links. Note: this will also prevent valid links from being followed by search engines, therefore it is likely most effective when enabled for anonymous users."
 msgstr ""
 
-#: realname.module:487
+#: realname.module:484
 msgid "Save"
 msgstr ""
 
-#: realname.module:522
+#: realname.module:519
 msgid "Configuration has been updated."
 msgstr ""
 
