@@ -78,6 +78,25 @@ function realname_menu($may_cache) {
       'type' => MENU_LOCAL_TASK,
       'weight' => 2,
       );
+
+    // CCK Userref intercept.
+    $items[] = array(
+      'path' => 'realname/userref/autocomplete',
+      'title' => t('RealName user reference autocomplete'),
+      'callback' => 'realname_userref_autocomplete',
+      'access' => user_access('access content'),
+      'type' => MENU_CALLBACK,
+      );
+
+    // Privatemsg intercept.
+    $items[] = array(
+      'path' => 'realname/privatemsg/autocomplete',
+      'title' => t('Realname Privatemsg autocomplete'),
+      'callback' => 'realname_privatemsg_autocomplete',
+      'access' => user_access('access private messages'),
+      'type' => MENU_CALLBACK,
+    );
+
   }
   else {
     // If desired, load the theme override file.
@@ -118,7 +137,7 @@ function realname_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
     return;
   }
   switch ($op) {
-    case 'load':
+    case 'view':
       // Node is being loaded.
       // Save the username that is already there.
       $node->realname_save = $node->name;
@@ -162,6 +181,40 @@ function realname_form_alter($form_id, &$form) {
   if (!user_access('use realname')) {
     return;
   }
+//  drupal_set_message($form_id);
+  if (substr($form_id, -10) == '_node_form') {
+//    drupal_set_message(print_r($form, TRUE));
+    foreach ($form as $name => $elements) {
+      if (substr($name, 0, 6) == 'field_') {
+        if (isset($form[$name]['uids'])) {
+          $fields = content_fields();
+          $field = $fields[$name];
+          $options = _userreference_potential_references($field);
+          foreach ($options as $uid => $optname) {
+            $account = user_load(array('uid' => $uid));
+            $options[$uid] = realname_make_name($account);
+          }
+          asort($options);
+          if (!$field['required']) {
+            $options = array('none' => t('<none>')) + $options;
+          }
+          $form[$name]['uids']['#options'] = $options;
+        }
+        else {
+          foreach ($elements as $key => $value) {
+            if (is_numeric($key)) {
+              foreach ($value as $key1 => $value1) {
+                if (isset($form[$name][$key]['user_name']['#autocomplete_path'])) {
+                  $path = 'realname/userref/autocomplete/'. $name;
+                  $form[$name][$key]['user_name']['#autocomplete_path'] = $path;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 
   $bypass_forms = variable_get('realname_bypass_forms', array(array('name' => 'comment_form', 'fields' => array('name'))));
   foreach ($bypass_forms as $bypass) {
@@ -185,6 +238,11 @@ function realname_form_alter($form_id, &$form) {
 //      $form['author']['#default_value'] = $user->realname_save;
 //      break;
 
+    case 'privatemsg_new_form':
+//      drupal_set_message(print_r($form['header']['recipient']['#autocomplete_path'], true));
+      $form['header']['recipient']['#autocomplete_path'] = 'realname/privatemsg/autocomplete';
+      break;
+
     case 'user_edit':
     case 'user_profile_form':
       if (variable_get('realname_theme', TRUE)) {
@@ -207,6 +265,52 @@ function realname_form_alter($form_id, &$form) {
       break;
   }
 }
+
+/**
+ * Intercept Privatemsg autocomplete results for usernames.
+ */
+function realname_privatemsg_autocomplete($string) {
+  $names = explode(',', $string);
+//  for ($i = 0; $i < count($names); $i++) {
+//    $names[$i] = trim($names[$i]);
+//  }
+  $names = array_map('trim', $names);
+  $search = array_pop($names);
+
+  if ($search != '') {
+    $sql = "SELECT uid, name FROM {users} u WHERE status <> 0 AND LOWER(name) LIKE LOWER('%s%%') AND ";
+    $sql .= variable_get('privatemsg_default_allow', 1) ? '(data NOT LIKE \'%%:16:"privatemsg_allow";i:0%%\' OR data IS NULL)' : 'data LIKE \'%%:16:"privatemsg_allow";i:1%%\'';
+    $sql .= ' ORDER BY name ASC';
+    $result = db_query_range($sql, $search, 0, 10);
+    $prefix = count($names) ? implode(', ', $names) .', ' : '';
+    $matches = array();
+    while ($user = db_fetch_object($result)) {
+      $account = user_load(array('uid' => $user->uid));
+      $matches[$prefix . $user->name] = realname_make_name($account);
+    }
+    print drupal_to_js($matches);
+    exit();
+  }
+}
+/**
+ * CCK Userref intercept; Change autocomplete suggestions to realnames.
+ */
+function realname_userref_autocomplete($field_name, $string = '') {
+  $fields = content_fields();
+  $field = $fields[$field_name];
+
+  $matches = array();
+  if ($string !== '') {
+    $list = _userreference_potential_references($field, $string);
+    foreach ($list as $uid => $name) {
+      $account = user_load(array('uid' => $uid));
+      $matches[$name] = realname_make_name($account);
+    }
+  }
+  print drupal_to_js($matches);
+  exit();
+}
+
 
 //********************************************************************
 //* Module Functions
@@ -261,7 +365,7 @@ function realname_make_name(&$account) {
 //      drupal_set_message("$account->name ($account->uid) has marked the $name field as private.");
 //    }
     $private_field = isset($account->{$private}) ? $account->{$private} : FALSE;
-    if (isset($account->$name) && !$private_field) {
+      if (isset($account->$name) && !empty($account->$name) && !$private_field) {
       $stuff['%'. $i] = $account->$name;
     }
     else {
