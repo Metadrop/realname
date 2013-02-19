@@ -5,6 +5,19 @@
  */
 
 /**
+ * Implementation of hook_realname().
+ */
+function content_profile_realname() {
+  return array(
+    'name'   => 'Content Profile',
+    'types'  => TRUE,
+    'fields' => TRUE,
+    'file'   => 'realname_content_profile.inc',
+    'path'   => drupal_get_path('module', 'realname'),
+  );
+}
+
+/**
  * Implementation of hook_profile_load();
  */
 function content_profile_load_profile(&$account, $type = NULL) {
@@ -44,11 +57,11 @@ function content_profile_load_profile(&$account, $type = NULL) {
 //  $account->title = $profile->title; // http://drupal.org/node/606364
 }
 
-function realname_content_profile_get_types() {
+function content_profile_realname_get_types() {
   return content_profile_get_types('names');
 }
 
-function realname_content_profile_get_fields($current, $type) {
+function content_profile_realname_get_fields($current, $type) {
   $fields = $links = array();
   $all_fields = content_fields(NULL, $type);
   if ($all_fields) {
