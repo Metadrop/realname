@@ -7,7 +7,7 @@
  */
 
 if (module_exists('token')) {
-  include_once(drupal_get_path('module', 'realname') . '/token_realname.inc');
+  include_once(drupal_get_path('module', 'realname') . '/realname_token.inc');
 }
 
 //********************************************************************
