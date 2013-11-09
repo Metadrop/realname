@@ -5,8 +5,6 @@
  * The RealName module allows the admin to choose fields from the user profile
  * that will be used to add a "realname" element (method) to a user object.
  * Hook_user is used to automatically add this to any user object that is loaded.
- *
- * @copyright Copyright (c) 2007-2008 Nancy Wichmann.  All rights reserved.
  */
 
 /**
