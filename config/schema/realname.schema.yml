@@ -1,0 +1,12 @@
+# Schema for the configuration files of the realname module.
+
+realname.settings:
+  type: config_object
+  label: 'Realname settings'
+  mapping:
+    pattern:
+      type: string
+      label: 'Realname pattern'
+    suppress_user_name_mail_validation:
+      type: boolean
+      label: 'Suppress missing token warning in e-mail templates'
