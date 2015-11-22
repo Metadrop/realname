@@ -2,30 +2,30 @@
 
 /**
  * @file
- * Test file for Realname module.
+ * Contains \Drupal\realname\Tests\RealnameBasicTest.
  */
+
+namespace Drupal\realname\Tests;
+
+use Drupal\simpletest\WebTestBase;
 
 /**
  * Test basic functionality of Realname module.
+ *
+ * @group Realname
  */
-class RealnameBasicTest extends DrupalWebTestCase {
+class RealnameBasicTest extends WebTestBase {
 
   /**
    * {@inheritdoc}
    */
-  public static function getInfo() {
-    return array(
-      'name' => 'Realname basic tests',
-      'description' => 'Test basic functionality of Realname module.',
-      'group' => 'Realname',
-    );
-  }
+  public static $modules = ['realname'];
 
   /**
    * {@inheritdoc}
    */
   protected function setUp() {
-    parent::setUp('realname');
+    parent::setUp();
 
     $permissions = array(
       'access administration pages',
@@ -57,7 +57,7 @@ class RealnameBasicTest extends DrupalWebTestCase {
 
     // Save form with allowed token.
     $edit['realname_pattern'] = '[user:name-raw]';
-    $this->drupalPost('admin/config/people/realname', $edit, t('Save configuration'));
+    $this->drupalPostForm('admin/config/people/realname', $edit, t('Save configuration'));
     $this->assertRaw(t('The configuration options have been saved.'), '[testRealnameConfiguration]: Settings form has been saved.');
 
     // Check if Configure link is available on 'Status Reports' page.
@@ -70,7 +70,7 @@ class RealnameBasicTest extends DrupalWebTestCase {
     // Save form with allowed token.
     $edit['realname_pattern'] = '[user:name-raw]';
     $edit['realname_suppress_user_name_mail_validation'] = TRUE;
-    $this->drupalPost('admin/config/people/realname', $edit, t('Save configuration'));
+    $this->drupalPostForm('admin/config/people/realname', $edit, t('Save configuration'));
     $this->assertRaw(t('The configuration options have been saved.'), '[testRealnameConfiguration]: Settings form has been saved.');
 
     // Test suppress missing token warning in e-mail templates.
@@ -81,7 +81,7 @@ class RealnameBasicTest extends DrupalWebTestCase {
 
     // Check token recursion protection.
     $edit['realname_pattern'] = '[user:name]';
-    $this->drupalPost('admin/config/people/realname', $edit, t('Save configuration'));
+    $this->drupalPostForm('admin/config/people/realname', $edit, t('Save configuration'));
     $this->assertRaw(t('The <em>[user:name]</em> token cannot be used as it will cause recursion.'), '[testRealnameConfiguration]: Invalid token found.');
   }
 
@@ -91,7 +91,7 @@ class RealnameBasicTest extends DrupalWebTestCase {
   public function testRealnameUsernameAlter() {
     // Add a test string and see if core username has been replaced by realname.
     $edit['realname_pattern'] = '[user:name-raw] (UID: [user:uid])';
-    $this->drupalPost('admin/config/people/realname', $edit, t('Save configuration'));
+    $this->drupalPostForm('admin/config/people/realname', $edit, t('Save configuration'));
 
     $this->drupalGet('user/' . $this->admin_user->uid);
     $this->assertRaw($this->admin_user->name . ' (UID: ' . $this->admin_user->uid . ')', '[testRealnameUsernameAlter]: Real name shown on user page.');
@@ -105,7 +105,7 @@ class RealnameBasicTest extends DrupalWebTestCase {
    */
   public function testRealnameManageDisplay() {
     $edit['realname_pattern'] = '[user:name-raw]';
-    $this->drupalPost('admin/config/people/realname', $edit, t('Save configuration'));
+    $this->drupalPostForm('admin/config/people/realname', $edit, t('Save configuration'));
 
     $this->drupalGet('admin/config/people/accounts/fields');
     $this->assertNoRaw('Real name', '[testRealnameManageDisplay]: Real name field not shown in manage fields list.');
