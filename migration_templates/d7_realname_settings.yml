@@ -1,0 +1,15 @@
+id: d7_realname_settings
+label: Realname 7 configuration
+migration_tags:
+  - Drupal 7
+source:
+  plugin: variable
+  variables:
+    - realname_pattern
+    - realname_suppress_user_name_mail_validation
+process:
+  pattern: realname_pattern
+  suppress_user_name_mail_validation: realname_suppress_user_name_mail_validation
+destination:
+  plugin: config
+  config_name: realname.settings
