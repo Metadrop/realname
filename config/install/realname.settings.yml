@@ -1,2 +1,1 @@
 pattern: '[user:name-raw]'
-suppress_user_name_mail_validation: false

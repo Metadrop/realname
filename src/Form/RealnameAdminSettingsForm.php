@@ -63,17 +63,6 @@ class RealnameAdminSettingsForm extends ConfigFormBase {
       '#dialog' => TRUE,
     ];
 
-    $form['advanced'] = [
-      '#type' => 'fieldset',
-      '#title' => t('Advanded settings'),
-    ];
-    $form['advanced']['realname_suppress_user_name_mail_validation'] = [
-      '#type' => 'checkbox',
-      '#title' => t('Suppress missing token warning in e-mail templates'),
-      '#description' => t('With Real name module enabled you need to replace the token <code>[user:name]</code> with <code>[user:name-raw]</code> in your <a href="@people">e-mail</a> templates. If you are running modules like <em>Email Registration</em> you may like to suppress this warning and use a different token.', ['@people' => Url::fromRoute('entity.user.admin_form', [], ['fragment' => 'edit-email-admin-created'])]),
-      '#default_value' => $config->get('suppress_user_name_mail_validation'),
-    ];
-
     return parent::buildForm($form, $form_state);
   }
 
@@ -102,9 +91,6 @@ class RealnameAdminSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('realname.settings');
-    $config
-      ->set('suppress_user_name_mail_validation', $form_state->getValue('realname_suppress_user_name_mail_validation'))
-      ->save();
 
     if ($form['general']['realname_pattern']['#default_value'] != $form_state->getValue('realname_pattern')) {
       $config->set('pattern', $form_state->getValue('realname_pattern'))->save();

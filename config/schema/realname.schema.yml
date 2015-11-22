@@ -7,6 +7,3 @@ realname.settings:
     pattern:
       type: string
       label: 'Realname pattern'
-    suppress_user_name_mail_validation:
-      type: boolean
-      label: 'Suppress missing token warning in e-mail templates'
