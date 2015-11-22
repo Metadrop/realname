@@ -1,6 +1,8 @@
-name = Real name
-description = Provides token-based name displays for users.
-core = 7.x
-dependencies[] = token
-files[] = realname.test
-configure = admin/config/people/realname
+name: 'Real name'
+type: module
+description: 'Provides token-based name displays for users.'
+configure: realname.admin_settings_form
+core: 8.x
+version: VERSION
+dependencies:
+  - token:token
