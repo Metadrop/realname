@@ -27,13 +27,13 @@ class RealnameBasicTest extends WebTestBase {
   protected function setUp() {
     parent::setUp();
 
-    $permissions = array(
+    $permissions = [
       'access administration pages',
       'administer modules',
       'administer realname',
       'administer site configuration',
       'administer users',
-    );
+    ];
 
     // User to set up google_analytics.
     $this->admin_user = $this->drupalCreateUser($permissions);
