@@ -5,9 +5,7 @@ Hook_user is used to automatically add this to any user object that is loaded.
 
 Installation
 ------------
-Standard module installation applies. See
-https://drupal.org/documentation/install/modules-themes/modules-7
-for further information.
+Standard module installation applies.
 
 Menus
 -----
