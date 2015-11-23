@@ -1,1 +1,1 @@
-pattern: '[user:name-raw]'
+pattern: '[user:account-name]'
