@@ -56,33 +56,14 @@ class RealnameBasicTest extends WebTestBase {
     $this->assertRaw(t('Realname pattern'), '[testRealnameConfiguration]: Settings page displayed.');
 
     // Save form with allowed token.
-    $edit['realname_pattern'] = '[user:name-raw]';
+    $edit['realname_pattern'] = '[user:account-name]';
     $this->drupalPostForm('admin/config/people/realname', $edit, t('Save configuration'));
     $this->assertRaw(t('The configuration options have been saved.'), '[testRealnameConfiguration]: Settings form has been saved.');
-
-    // Check if Configure link is available on 'Status Reports' page.
-    // Requires 'administer site configuration' permission.
-    $this->drupalGet('admin/reports/status');
-    $this->assertRaw(t('E-mail: "Welcome (new user created by administrator)" template'), '[testRealnameConfiguration]: "Welcome (new user created by administrator)" template warning shown.');
-    $this->assertRaw(t('E-mail: "Welcome (no approval required)" template'), '[testRealnameConfiguration]: "Welcome (no approval required)" template warning shown.');
-    $this->assertRaw(t('E-mail: "Account activation" template'), '[testRealnameConfiguration]: "Account activation" template warning shown.');
-
-    // Save form with allowed token.
-    $edit['realname_pattern'] = '[user:name-raw]';
-    $edit['realname_suppress_user_name_mail_validation'] = TRUE;
-    $this->drupalPostForm('admin/config/people/realname', $edit, t('Save configuration'));
-    $this->assertRaw(t('The configuration options have been saved.'), '[testRealnameConfiguration]: Settings form has been saved.');
-
-    // Test suppress missing token warning in e-mail templates.
-    $this->drupalGet('admin/reports/status');
-    $this->assertNoRaw(t('E-mail: "Welcome (new user created by administrator)" template'), '[testRealnameConfiguration]: "Welcome (new user created by administrator)" template warning shown.');
-    $this->assertNoRaw(t('E-mail: "Welcome (no approval required)" template'), '[testRealnameConfiguration]: "Welcome (no approval required)" template warning shown.');
-    $this->assertNoRaw(t('E-mail: "Account activation" template'), '[testRealnameConfiguration]: "Account activation" template warning shown.');
 
     // Check token recursion protection.
     $edit['realname_pattern'] = '[user:name]';
     $this->drupalPostForm('admin/config/people/realname', $edit, t('Save configuration'));
-    $this->assertRaw(t('The <em>[user:name]</em> token cannot be used as it will cause recursion.'), '[testRealnameConfiguration]: Invalid token found.');
+    $this->assertRaw(t('The %token token cannot be used as it will cause recursion.', ['%token' => '[user:name]']), '[testRealnameConfiguration]: Invalid token found.');
   }
 
   /**
@@ -90,7 +71,7 @@ class RealnameBasicTest extends WebTestBase {
    */
   public function testRealnameUsernameAlter() {
     // Add a test string and see if core username has been replaced by realname.
-    $edit['realname_pattern'] = '[user:name-raw] (UID: [user:uid])';
+    $edit['realname_pattern'] = '[user:account-name] (UID: [user:uid])';
     $this->drupalPostForm('admin/config/people/realname', $edit, t('Save configuration'));
 
     $this->drupalGet('user/' . $this->admin_user->uid);
@@ -104,7 +85,7 @@ class RealnameBasicTest extends WebTestBase {
    * Test realname display configuration.
    */
   public function testRealnameManageDisplay() {
-    $edit['realname_pattern'] = '[user:name-raw]';
+    $edit['realname_pattern'] = '[user:account-name]';
     $this->drupalPostForm('admin/config/people/realname', $edit, t('Save configuration'));
 
     $this->drupalGet('admin/config/people/accounts/fields');
