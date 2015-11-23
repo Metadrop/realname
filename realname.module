@@ -26,36 +26,6 @@ function realname_help($path, $arg) {
 }
 
 /**
- * Implements hook_menu().
- */
-function realname_menu() {
-  $items['admin/config/people/realname'] = array(
-    'title' => 'Real name',
-    'description' => 'Use tokens to configure how user names are displayed.',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('realname_settings_form'),
-    'access arguments' => array('administer realname'),
-    'file' => 'realname.admin.inc',
-  );
-
-  $items['realname/autocomplete'] = array(
-    'page callback' => 'realname_autocomplete',
-    'page arguments' => array('', '', 2),
-    'access arguments' => array('access user profiles'),
-    'type' => MENU_CALLBACK,
-  );
-  $items['realname/autocomplete/%/%/%'] = array(
-    'page callback' => 'realname_autocomplete',
-    'page arguments' => array(2, 3, 4),
-    'access callback' => 'realname_autocomplete_access_callback',
-    'access arguments' => array(2, 3, 4),
-    'type' => MENU_CALLBACK,
-  );
-
-  return $items;
-}
-
-/**
  * Implements hook_menu_alter().
  *
  * Replace user autocomplete with realname autocomplete.
