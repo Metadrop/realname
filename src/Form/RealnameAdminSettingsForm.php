@@ -77,7 +77,6 @@ class RealnameAdminSettingsForm extends ConfigFormBase {
     // Tokens that will cause recursion.
     $tokens = [
       '[user:name]',
-      '[user:account-name]',
     ];
     foreach ($tokens as $token) {
       if (strpos($pattern, $token) !== FALSE) {
