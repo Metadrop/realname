@@ -26,18 +26,6 @@ function realname_help($path, $arg) {
 }
 
 /**
- * Implements hook_permission().
- */
-function realname_permission() {
-  return array(
-    'administer realname' => array(
-      'title' => t('Administer Real Name'),
-      'description' => t('Allows users to administer realname settings.'),
-    ),
-  );
-}
-
-/**
  * Implements hook_menu().
  */
 function realname_menu() {
