@@ -1,0 +1,14 @@
+realname.admin_settings_form:
+  path: '/admin/config/people/realname'
+  defaults:
+    _form: 'Drupal\realname\Form\RealnameAdminSettingsForm'
+    _title: 'Real name'
+  requirements:
+    _permission: 'administer realname'
+
+realname.autocomplete:
+  path: '/realname/autocomplete'
+  defaults:
+    _controller: '\Drupal\realname\Controller\RealnameAutocompleteController::autocompleteUser'
+  requirements:
+    _permission: 'access user profiles'
