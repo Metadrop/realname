@@ -9,6 +9,8 @@
  * @todo Disable the username field
  */
 
+use Drupal\Core\Routing\RouteMatchInterface;
+
 /**
  * @defgroup realname Real name API
  */
@@ -16,11 +18,11 @@
 /**
  * Implements hook_help().
  */
-function realname_help($path, $arg) {
-  switch ($path) {
+function realname_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
     // Main module help for the Realname module.
     case 'admin/config/people/realname':
-    case 'admin/help#realname':
+    case 'help.page.realname':
       return '<p>' . t("A Real Name is what the site developer decides that users' names should look like. It is constructed from various tokens that are available within the site.") . '</p>';
   }
 }
