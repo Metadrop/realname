@@ -29,7 +29,7 @@ function realname_help($route_name, RouteMatchInterface $route_match) {
 }
 
 /**
- * Implements hook_menu_alter().
+ * @TODO: Implements hook_menu_alter().
  *
  * Replace user autocomplete with realname autocomplete.
  */
@@ -40,9 +40,9 @@ function realname_menu_alter(&$items) {
 }
 
 /**
- * Implements hook_field_extra_fields().
+ * Implements hook_entity_extra_field_info().
  */
-function realname_field_extra_fields() {
+function realname_entity_extra_field_info() {
   $fields['user']['user']['display']['realname'] = array(
     'label' => t('Real name'),
     'description' => t('Real name'),
