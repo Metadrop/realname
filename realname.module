@@ -12,6 +12,7 @@
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\user\Entity\User;
+use Drupal\Component\Utility\Html;
 
 /**
  * @defgroup realname Real name API
@@ -102,7 +103,7 @@ function realname_user_load(array $accounts) {
 /**
  * Implements hook_ENTITY_TYPE_update().
  */
-function realname_user_update($account) {
+function realname_user_update(Drupal\Core\Entity\EntityInterface $account) {
   // Since user data may have changed, update the realname.
   realname_update($account->id());
 }
@@ -110,32 +111,22 @@ function realname_user_update($account) {
 /**
  * Implements hook_ENTITY_TYPE_delete().
  */
-function realname_user_delete($account) {
+function realname_user_delete(Drupal\Core\Entity\EntityInterface $account) {
   realname_delete($account->id());
 }
 
 /**
- * @TODO Implements hook_profile2_update().
+ * Implements hook_ENTITY_TYPE_view().
  */
-function realname_profile2_update($profile) {
-  $account = user_load($profile->uid);
-  if (is_object($account)) {
-    realname_update($account);
-  }
-}
-
-/**
- * @TODO Implements hook_user_view().
- */
-function realname_user_view($account, $view_mode, $langcode) {
+function realname_user_view(array &$build, \Drupal\Core\Entity\EntityInterface $account, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display, $view_mode) {
   if (user_view_access($account)) {
-    $markup = l($account->realname, 'user/' . $account->uid);
+    $markup = l($account->realname, 'user/' . $account->id());
   }
   else {
-    $markup = check_plain($account->realname);
+    $markup = Html::escape($account->realname);
   }
 
-  $account->content['realname'] = array(
+  $build['realname'] = [
     '#entity_type' => 'custom',
     '#bundle' => 'custom',
     '#field_type' => 'text',
@@ -143,9 +134,11 @@ function realname_user_view($account, $view_mode, $langcode) {
     '#field_name' => 'realname',
     '#title' => t('Real name'),
     '#label_display' => 'inline',
-    '#items' => array(TRUE),
-    0 => array('#markup' => $markup),
-  );
+    '#items' => [TRUE],
+    0 => [
+      '#markup' => $markup
+    ],
+  ];
 }
 
 /**
@@ -157,6 +150,16 @@ function realname_user_operations() {
     'callback' => 'realname_user_operations_realname_update',
   );
   return $operations;
+}
+
+/**
+ * @TODO Implements hook_profile2_update().
+ */
+function realname_profile2_update($profile) {
+  $account = user_load($profile->uid);
+  if (is_object($account)) {
+    realname_update($account);
+  }
 }
 
 /**
