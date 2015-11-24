@@ -102,16 +102,16 @@ function realname_user_load(array $accounts) {
 /**
  * Implements hook_ENTITY_TYPE_update().
  */
-function realname_user_update(&$edit, $account, $category) {
+function realname_user_update($account) {
   // Since user data may have changed, update the realname.
-  realname_update($account);
+  realname_update($account->id());
 }
 
 /**
  * Implements hook_ENTITY_TYPE_delete().
  */
 function realname_user_delete($account) {
-  realname_delete($account->uid);
+  realname_delete($account->id());
 }
 
 /**
