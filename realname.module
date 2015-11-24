@@ -142,7 +142,7 @@ function realname_user_view(array &$build, \Drupal\Core\Entity\EntityInterface $
 }
 
 /**
- * Implements hook_user_operations().
+ * @TODO Implements hook_user_operations().
  */
 function realname_user_operations() {
   $operations['realname_update'] = array(
