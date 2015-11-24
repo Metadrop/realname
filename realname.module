@@ -90,7 +90,7 @@ function realname_user_format_name_alter(&$name, $account) {
 }
 
 /**
- * @TODO Implements hook_ENTITY_TYPE_load().
+ * Implements hook_ENTITY_TYPE_load().
  */
 function realname_user_load(array $accounts) {
   $realnames = realname_load_multiple($accounts);
@@ -100,7 +100,7 @@ function realname_user_load(array $accounts) {
 }
 
 /**
- * @TODO Implements hook_ENTITY_TYPE_update().
+ * Implements hook_ENTITY_TYPE_update().
  */
 function realname_user_update(&$edit, $account, $category) {
   // Since user data may have changed, update the realname.
@@ -108,7 +108,7 @@ function realname_user_update(&$edit, $account, $category) {
 }
 
 /**
- * @TODO Implements hook_ENTITY_TYPE_delete().
+ * Implements hook_ENTITY_TYPE_delete().
  */
 function realname_user_delete($account) {
   realname_delete($account->uid);
