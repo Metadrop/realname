@@ -10,6 +10,7 @@
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\user\Entity\User;
 
 /**
  * @defgroup realname Real name API
@@ -52,13 +53,14 @@ function realname_field_extra_fields() {
 }
 
 /**
- * Implements hook_username_alter().
+ * Implements hook_user_format_name_alter().
  */
-function realname_username_alter(&$name, $account) {
+function realname_user_format_name_alter(&$name, $account) {
   static $in_username_alter = FALSE;
+  $uid = $account->id();
 
-  if (empty($account->uid)) {
-    // Don't alter anonymous users or objects that do not have any user ID.
+  // Don't alter anonymous users or objects that do not have any user ID.
+  if (empty($uid)) {
     return;
   }
 
@@ -78,8 +80,8 @@ function realname_username_alter(&$name, $account) {
 
     // If $account->realname was undefined, then the user account object was
     // not properly loaded. We must enforce calling user_load().
-    if ($realname_account = user_load($account->uid)) {
-      realname_username_alter($name, $realname_account);
+    if ($realname_account = user_load($uid)) {
+      realname_user_format_name_alter($name, $realname_account);
     }
 
     $in_username_alter = FALSE;
@@ -87,9 +89,9 @@ function realname_username_alter(&$name, $account) {
 }
 
 /**
- * Implements hook_user_load().
+ * @TODO Implements hook_user_load().
  */
-function realname_user_load($accounts) {
+function realname_user_load(array $accounts) {
   $realnames = realname_load_multiple($accounts);
   foreach ($realnames as $uid => $realname) {
     $accounts[$uid]->realname = $realname;
@@ -97,7 +99,7 @@ function realname_user_load($accounts) {
 }
 
 /**
- * Implements hook_user_update().
+ * @TODO Implements hook_user_update().
  */
 function realname_user_update(&$edit, $account, $category) {
   // Since user data may have changed, update the realname.
@@ -105,7 +107,7 @@ function realname_user_update(&$edit, $account, $category) {
 }
 
 /**
- * Implements hook_profile2_update().
+ * @TODO Implements hook_profile2_update().
  */
 function realname_profile2_update($profile) {
   $account = user_load($profile->uid);
@@ -115,14 +117,14 @@ function realname_profile2_update($profile) {
 }
 
 /**
- * Implements hook_user_delete().
+ * @TODO Implements hook_user_delete().
  */
 function realname_user_delete($account) {
   realname_delete($account->uid);
 }
 
 /**
- * Implements hook_user_view().
+ * @TODO Implements hook_user_view().
  */
 function realname_user_view($account, $view_mode, $langcode) {
   if (user_view_access($account)) {
@@ -170,7 +172,7 @@ function realname_user_operations_realname_update(array $uids) {
 }
 
 /**
- * Implements hook_action_info().
+ * @TODO Implements hook_action_info().
  */
 function realname_action_info() {
   $info['realname_action_realname_update'] = array(
@@ -183,7 +185,7 @@ function realname_action_info() {
 }
 
 /**
- * Implements hook_rules_action_info().
+ * @TODO Implements hook_rules_action_info().
  */
 function realname_rules_action_info() {
   $items['user_realname_update'] = array(
@@ -230,8 +232,8 @@ function realname_views_api() {
  * @return mixed
  *   The user's generated real name.
  */
-function realname_load($account) {
-  $realnames = realname_load_multiple(array($account->uid => $account));
+function realname_load(stdClass $account) {
+  $realnames = realname_load_multiple(array($account->id() => $account));
   return reset($realnames);
 }
 
@@ -276,13 +278,14 @@ function realname_load_multiple(array $accounts) {
  * @see hook_realname_alter()
  * @see hook_realname_update()
  */
-function realname_update($account) {
-  // Get the default pattern and allow other modules to alter it.
-  $pattern = variable_get('realname_pattern', '[user:name-raw]');
-  drupal_alter('realname_pattern', $pattern, $account);
+function realname_update(User $account) {
+    // Get the default pattern and allow other modules to alter it.
+  $config = config('realname.settings');
+  $pattern = $config->get('pattern');
+  \Drupal::moduleHandler()->alter('realname_pattern', $pattern, $account);
 
   // Perform token replacement on the real name pattern.
-  $realname = token_replace($pattern, array('user' => $account), array('clear' => TRUE, 'sanitize' => FALSE));
+  $realname = \Drupal::token()->replace($pattern, array('user' => $account), array('clear' => TRUE, 'sanitize' => FALSE));
 
   // Remove any HTML tags.
   $realname = strip_tags(decode_entities($realname));
@@ -295,11 +298,11 @@ function realname_update($account) {
   $realname = truncate_utf8(trim($realname), 255);
 
   // Allow other modules to alter the generated realname.
-  drupal_alter('realname', $realname, $account);
+  \Drupal::moduleHandler()->alter('realname', $realname, $account);
 
   // Save to the database and the static cache.
   db_merge('realname')
-    ->key(array('uid' => $account->uid))
+    ->key(array('uid' => $account->id()))
     ->fields(array(
       'realname' => $realname,
       'created' => REQUEST_TIME,
@@ -307,9 +310,9 @@ function realname_update($account) {
     ->execute();
 
   // Allow modules to react to the realname being updated.
-  module_invoke_all('realname_update', $realname, $account);
+  \Drupal::moduleHandler()->invokeAll('realname_update', array($realname, $account));
 
-  $account->realname = $realname;
+  $account->setUsername($realname);
   return $realname;
 }
 
