@@ -9,6 +9,7 @@
  * @todo Disable the username field
  */
 
+use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\user\Entity\User;
 
@@ -66,7 +67,7 @@ function realname_user_format_name_alter(&$name, $account) {
 
   // Real name was loaded/generated via hook_user_load(), so re-use it.
   if (isset($account->realname)) {
-    if (drupal_strlen($account->realname)) {
+    if (Unicode::strlen($account->realname)) {
       // Only if the real name is a non-empty string is $name actually altered.
       $name = $account->realname;
     }
@@ -80,7 +81,7 @@ function realname_user_format_name_alter(&$name, $account) {
 
     // If $account->realname was undefined, then the user account object was
     // not properly loaded. We must enforce calling user_load().
-    if ($realname_account = user_load($uid)) {
+    if ($realname_account = User::load($uid)) {
       realname_user_format_name_alter($name, $realname_account);
     }
 
