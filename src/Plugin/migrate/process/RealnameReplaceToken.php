@@ -33,7 +33,7 @@ class RealnameReplaceToken extends ProcessPluginBase {
     // At least two tokens may exists:
     // - [user:name-raw]
     // - [current-user:name-raw]
-    return str_replace(':name-raw]', ':account-name]', $realname_pattern);
+    return str_ireplace(':name-raw]', ':account-name]', $realname_pattern);
   }
 
 }
