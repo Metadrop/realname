@@ -8,6 +8,7 @@
 namespace Drupal\realname\Tests;
 
 use Drupal\simpletest\WebTestBase;
+use Drupal\user\Entity\User;
 
 /**
  * Test basic functionality of Realname module.
@@ -103,17 +104,18 @@ class RealnameBasicTest extends WebTestBase {
    */
   public function testRealnameUserUpdate() {
     $edit['realname_pattern'] = '[user:name-raw]';
-    $this->drupalPost('admin/config/people/realname', $edit, t('Save configuration'));
+    $this->drupalPostForm('admin/config/people/realname', $edit, t('Save configuration'));
 
-    $user1 = user_load($this->admin_user->uid);
+    $user1 = User::load($this->admin_user->id());
     $realname1 = $user1->realname;
 
     // Update user name.
     $user1->name = $this->randomMachineName();
+    // @fixme: D8 Upgrade?
     user_save($user1);
 
     // Reload the user.
-    $user2 = user_load($this->admin_user->uid);
+    $user2 = User::load($this->admin_user->id());
     $realname2 = $user2->realname;
 
     // Check if realname changed.
