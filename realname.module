@@ -104,8 +104,9 @@ function realname_user_load(array $accounts) {
  * Implements hook_ENTITY_TYPE_update().
  */
 function realname_user_update(Drupal\Core\Entity\EntityInterface $account) {
-  // Since user data may have changed, update the realname.
-  realname_update($account->id());
+  // Since user data may have changed, update the realname and its cache.
+  $realnames = &drupal_static('realname_load_multiple', array());
+  $realnames[$account->id()] = realname_update($account->id());
 }
 
 /**
