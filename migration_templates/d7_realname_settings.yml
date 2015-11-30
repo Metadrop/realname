@@ -7,7 +7,10 @@ source:
   variables:
     - realname_pattern
 process:
-  pattern: realname_pattern
+  pattern:
+    plugin: realname_replace_token
+    source:
+      - realname_pattern
 destination:
   plugin: config
   config_name: realname.settings
