@@ -103,7 +103,7 @@ class RealnameBasicTest extends WebTestBase {
    * Test realname user update.
    */
   public function testRealnameUserUpdate() {
-    $edit['realname_pattern'] = '[user:name-raw]';
+    $edit['realname_pattern'] = '[user:account-name]';
     $this->drupalPostForm('admin/config/people/realname', $edit, t('Save configuration'));
 
     $user1 = User::load($this->admin_user->id());
