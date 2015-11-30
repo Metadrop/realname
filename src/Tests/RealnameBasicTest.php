@@ -98,4 +98,28 @@ class RealnameBasicTest extends WebTestBase {
     $this->assertText('Real name', '[testRealnameManageDisplay]: Real name field visible on user page.');
   }
 
+  /**
+   * Test realname user update.
+   */
+  public function testRealnameUserUpdate() {
+    $edit['realname_pattern'] = '[user:name-raw]';
+    $this->drupalPost('admin/config/people/realname', $edit, t('Save configuration'));
+
+    $user1 = user_load($this->admin_user->uid);
+    $realname1 = $user1->realname;
+
+    // Update user name.
+    $user1->name = $this->randomMachineName();
+    user_save($user1);
+
+    // Reload the user.
+    $user2 = user_load($this->admin_user->uid);
+    $realname2 = $user2->realname;
+
+    // Check if realname changed.
+    $this->assertTrue($realname1);
+    $this->assertTrue($realname2);
+    $this->assertNotEqual($realname1, $realname2, '[testRealnameUserUpdate]: Real name changed.');
+  }
+
 }
