@@ -49,6 +49,7 @@ function realname_entity_extra_field_info() {
     'label' => t('Real name'),
     'description' => t('Real name'),
     'weight' => -1,
+    'visible' => FALSE,
   );
 
   return $fields;
