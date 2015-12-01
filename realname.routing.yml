@@ -5,10 +5,3 @@ realname.admin_settings_form:
     _title: 'Real name'
   requirements:
     _permission: 'administer realname'
-
-realname.autocomplete:
-  path: '/realname/autocomplete'
-  defaults:
-    _controller: '\Drupal\realname\Controller\RealnameAutocompleteController::autocompleteUser'
-  requirements:
-    _permission: 'access user profiles'
