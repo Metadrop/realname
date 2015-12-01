@@ -284,8 +284,8 @@ function realname_load_multiple(array $accounts) {
  * @see hook_realname_update()
  */
 function realname_update(User $account) {
-    // Get the default pattern and allow other modules to alter it.
-  $config = config('realname.settings');
+  // Get the default pattern and allow other modules to alter it.
+  $config = \Drupal::config('realname.settings');
   $pattern = $config->get('pattern');
   \Drupal::moduleHandler()->alter('realname_pattern', $pattern, $account);
 
