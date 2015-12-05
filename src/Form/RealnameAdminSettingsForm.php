@@ -97,7 +97,7 @@ class RealnameAdminSettingsForm extends ConfigFormBase {
       // Only clear the realname cache if the pattern was changed.
       realname_delete_all();
 
-      // A change to the display-name must invalidate the render cache
+      // A change to the display-name pattern must invalidate the render cache
       // since the display-name could be used anywhere.
       Cache::invalidateTags(['rendered']);
     }
