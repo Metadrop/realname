@@ -20,7 +20,10 @@ class RealnameBasicTest extends WebTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['realname'];
+  public static $modules = [
+    'realname',
+    'field_ui',
+  ];
 
   /**
    * {@inheritdoc}
@@ -30,10 +33,12 @@ class RealnameBasicTest extends WebTestBase {
 
     $permissions = [
       'access administration pages',
-      'administer account settings',
       'administer modules',
       'administer realname',
       'administer site configuration',
+      'administer user fields',
+      'administer user form display',
+      'administer user display',
       'administer users',
     ];
 
@@ -92,6 +97,9 @@ class RealnameBasicTest extends WebTestBase {
 
     $this->drupalGet('admin/config/people/accounts/fields');
     $this->assertNoRaw('Real name', '[testRealnameManageDisplay]: Real name field not shown in manage fields list.');
+
+    $this->drupalGet('admin/config/people/accounts/form-display');
+    $this->assertNoRaw('Real name', '[testRealnameManageDisplay]: Real name field not shown in manage form display list.');
 
     $this->drupalGet('admin/config/people/accounts/display');
     $this->assertRaw('Real name', '[testRealnameManageDisplay]: Real name field shown in manage display.');
