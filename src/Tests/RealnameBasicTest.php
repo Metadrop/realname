@@ -75,11 +75,11 @@ class RealnameBasicTest extends WebTestBase {
     $edit['realname_pattern'] = '[user:account-name] (UID: [user:uid])';
     $this->drupalPostForm('admin/config/people/realname', $edit, t('Save configuration'));
 
-    $this->drupalGet('user/' . $this->admin_user->uid);
-    $this->assertRaw($this->admin_user->name . ' (UID: ' . $this->admin_user->uid . ')', '[testRealnameUsernameAlter]: Real name shown on user page.');
+    $this->drupalGet('user/' . $this->admin_user->id());
+    $this->assertRaw($this->admin_user->name . ' (UID: ' . $this->admin_user->id() . ')', '[testRealnameUsernameAlter]: Real name shown on user page.');
 
-    $this->drupalGet('user/' . $this->admin_user->uid . '/edit');
-    $this->assertRaw($this->admin_user->name . ' (UID: ' . $this->admin_user->uid . ')', '[testRealnameUsernameAlter]: Real name shown on user edit page.');
+    $this->drupalGet('user/' . $this->admin_user->id() . '/edit');
+    $this->assertRaw($this->admin_user->name . ' (UID: ' . $this->admin_user->id() . ')', '[testRealnameUsernameAlter]: Real name shown on user edit page.');
   }
 
   /**
