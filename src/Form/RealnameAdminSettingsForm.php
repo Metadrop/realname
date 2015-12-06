@@ -73,7 +73,7 @@ class RealnameAdminSettingsForm extends ConfigFormBase {
   public function validateForm(array &$form, FormStateInterface $form_state) {
     parent::validateForm($form, $form_state);
 
-    $pattern = $form_state->getValue('pattern');
+    $pattern = $form_state->getValue('realname_pattern');
 
     // Tokens that will cause recursion.
     $tokens = [
