@@ -121,26 +121,28 @@ function realname_user_delete(Drupal\Core\Entity\EntityInterface $account) {
  * Implements hook_ENTITY_TYPE_view().
  */
 function realname_user_view(array &$build, \Drupal\Core\Entity\EntityInterface $account, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display, $view_mode) {
-  if ($account->access('view')) {
-    $markup = l($account->realname, 'user/' . $account->id());
-  }
-  else {
-    $markup = Html::escape($account->realname);
-  }
+  if ($display->getComponent('realname')) {
+    if ($account->access('view')) {
+      $markup = l($account->realname, 'user/' . $account->id());
+    }
+    else {
+      $markup = Html::escape($account->realname);
+    }
 
-  $build['realname'] = [
-    '#entity_type' => 'custom',
-    '#bundle' => 'custom',
-    '#field_type' => 'text',
-    '#theme' => 'field',
-    '#field_name' => 'realname',
-    '#title' => t('Real name'),
-    '#label_display' => 'inline',
-    '#items' => [TRUE],
-    0 => [
-      '#markup' => $markup
-    ],
-  ];
+    $build['realname'] = [
+      '#entity_type' => 'custom',
+      '#bundle' => 'custom',
+      '#field_type' => 'text',
+      '#theme' => 'field',
+      '#field_name' => 'realname',
+      '#title' => t('Real name'),
+      '#label_display' => 'inline',
+      '#items' => [TRUE],
+      0 => [
+        '#markup' => $markup
+      ],
+    ];
+  ]
 }
 
 /**
