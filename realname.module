@@ -121,7 +121,7 @@ function realname_user_delete(Drupal\Core\Entity\EntityInterface $account) {
  * Implements hook_ENTITY_TYPE_view().
  */
 function realname_user_view(array &$build, \Drupal\Core\Entity\EntityInterface $account, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display, $view_mode) {
-  if (user_view_access($account)) {
+  if ($account->access('view')) {
     $markup = l($account->realname, 'user/' . $account->id());
   }
   else {
