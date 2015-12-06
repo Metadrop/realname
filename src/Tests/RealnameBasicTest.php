@@ -95,7 +95,7 @@ class RealnameBasicTest extends WebTestBase {
     $this->drupalGet('admin/config/people/accounts/display');
     $this->assertRaw('Real name', '[testRealnameManageDisplay]: Real name field shown in manage display.');
 
-    $this->drupalGet('user/' . $this->admin_user->uid);
+    $this->drupalGet('user/' . $this->admin_user->id());
     $this->assertText('Real name', '[testRealnameManageDisplay]: Real name field visible on user page.');
   }
 
