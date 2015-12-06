@@ -30,6 +30,7 @@ class RealnameBasicTest extends WebTestBase {
 
     $permissions = [
       'access administration pages',
+      'administer account settings',
       'administer modules',
       'administer realname',
       'administer site configuration',
