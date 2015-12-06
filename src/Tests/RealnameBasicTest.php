@@ -36,7 +36,7 @@ class RealnameBasicTest extends WebTestBase {
       'administer users',
     ];
 
-    // User to set up google_analytics.
+    // User to set up realname.
     $this->admin_user = $this->drupalCreateUser($permissions);
     $this->drupalLogin($this->admin_user);
     //$this->verbose('<pre>' . print_r($this->admin_user, TRUE) . '</pre>');
