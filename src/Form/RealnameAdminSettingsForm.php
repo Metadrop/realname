@@ -94,12 +94,6 @@ class RealnameAdminSettingsForm extends ConfigFormBase {
 
     if ($form['general']['realname_pattern']['#default_value'] != $form_state->getValue('realname_pattern')) {
       $config->set('pattern', $form_state->getValue('realname_pattern'))->save();
-      // Only clear the realname cache if the pattern was changed.
-      realname_delete_all();
-
-      // A change to the display-name pattern must invalidate the render cache
-      // since the display-name could be used anywhere.
-      Cache::invalidateTags(['rendered']);
     }
 
     parent::submitForm($form, $form_state);
