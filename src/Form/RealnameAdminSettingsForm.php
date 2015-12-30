@@ -58,10 +58,9 @@ class RealnameAdminSettingsForm extends ConfigFormBase {
     ];
     // Add the token tree UI.
     $form['general']['token_help'] = [
-      '#theme' => 'token_tree',
+      '#theme' => 'token_tree_link',
       '#token_types' => ['user'],
       '#global_types' => FALSE,
-      '#dialog' => TRUE,
     ];
 
     return parent::buildForm($form, $form_state);
