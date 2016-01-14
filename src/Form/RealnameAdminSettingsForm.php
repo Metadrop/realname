@@ -38,7 +38,7 @@ class RealnameAdminSettingsForm extends ConfigFormBase {
 
     $form['general'] = [
       '#type' => 'fieldset',
-      '#title' => t('General settings'),
+      '#title' => $this->t('General settings'),
     ];
 
     $note = '<div>';
@@ -47,14 +47,14 @@ class RealnameAdminSettingsForm extends ConfigFormBase {
 
     $form['general']['realname_pattern'] = [
       '#type' => 'textfield',
-      '#title' => t('Realname pattern'),
+      '#title' => $this->t('Realname pattern'),
       '#default_value' => $config->get('pattern'),
       '#element_validate' => ['token_element_validate'],
       '#token_types' => ['user'],
       '#min_tokens' => 1,
       '#required' => TRUE,
       '#maxlength' => 256,
-      '#description' => t('This pattern will be used to construct Realnames for all users.') . $note,
+      '#description' => $this->t('This pattern will be used to construct Realnames for all users.') . $note,
     ];
     // Add the token tree UI.
     $form['general']['token_help'] = [
