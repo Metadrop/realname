@@ -19,6 +19,6 @@
   },
   "license": "GPL-2.0+",
   "require": {
-    token/token: "dev"
+    drupal/token: "dev"
   }
 }
