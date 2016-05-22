@@ -111,10 +111,6 @@ class RealnameBasicTest extends WebTestBase {
     $this->drupalGet('user/' . $this->admin_user->id());
     $this->assertNoText('Real name', '[testRealnameManageDisplay]: Real name field not visible on user page.');
 
-    // By default the realname field is not visible.
-    $this->drupalGet('user/' . $this->admin_user->id());
-    $this->assertNoText('Real name', '[testRealnameManageDisplay]: Real name field not visible on user page.');
-
     // Make realname field visible on user page.
     $this->drupalGet('admin/config/people/accounts/display');
     $edit = array('fields[realname][type]' => 'visible');
