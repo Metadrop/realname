@@ -122,7 +122,7 @@ class RealnameBasicTest extends WebTestBase {
     $this->assertResponse(200);
 
     $this->drupalGet('user/' . $this->admin_user->id());
-    $this->assertNoText('Real name', '[testRealnameManageDisplay]: Real name field visible on user page.');
+    $this->assertText('Real name', '[testRealnameManageDisplay]: Real name field visible on user page.');
   }
 
   /**
