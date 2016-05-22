@@ -96,16 +96,33 @@ class RealnameBasicTest extends WebTestBase {
     $this->drupalPostForm('admin/config/people/realname', $edit, t('Save configuration'));
 
     $this->drupalGet('admin/config/people/accounts/fields');
+    $this->assertTitle('Manage fields | Drupal');
     $this->assertNoRaw('Real name', '[testRealnameManageDisplay]: Real name field not shown in manage fields list.');
 
     $this->drupalGet('admin/config/people/accounts/form-display');
+    $this->assertTitle('Manage form display | Drupal');
     $this->assertNoRaw('Real name', '[testRealnameManageDisplay]: Real name field not shown in manage form display list.');
 
     $this->drupalGet('admin/config/people/accounts/display');
+    $this->assertTitle('Manage display | Drupal');
     $this->assertRaw('Real name', '[testRealnameManageDisplay]: Real name field shown in manage display.');
 
+    // By default the realname field is not visible.
     $this->drupalGet('user/' . $this->admin_user->id());
-    $this->assertText('Real name', '[testRealnameManageDisplay]: Real name field visible on user page.');
+    $this->assertNoText('Real name', '[testRealnameManageDisplay]: Real name field not visible on user page.');
+
+    // By default the realname field is not visible.
+    $this->drupalGet('user/' . $this->admin_user->id());
+    $this->assertNoText('Real name', '[testRealnameManageDisplay]: Real name field not visible on user page.');
+
+    // Make realname field visible on user page.
+    $this->drupalGet('admin/config/people/accounts/display');
+    $edit = array('fields[realname][type]' => 'visible');
+    $this->drupalPostForm(NULL, $edit, t('Save'));
+    $this->assertResponse(200);
+
+    $this->drupalGet('user/' . $this->admin_user->id());
+    $this->assertNoText('Real name', '[testRealnameManageDisplay]: Real name field visible on user page.');
   }
 
   /**
