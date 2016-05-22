@@ -120,8 +120,7 @@ class RealnameBasicTest extends WebTestBase {
 
     // Update user name.
     $user1->name = $this->randomMachineName();
-    // @fixme: D8 Upgrade?
-    user_save($user1);
+    $user1->save();
 
     // Reload the user.
     $user2 = User::load($this->admin_user->id());
