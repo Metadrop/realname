@@ -12,6 +12,7 @@
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
 use Drupal\user\Entity\User;
 
 /**
@@ -118,28 +119,33 @@ function realname_user_delete(Drupal\Core\Entity\EntityInterface $account) {
 }
 
 /**
- * Implements hook_ENTITY_TYPE_view().
+ * Implements hook_ENTITY_TYPE_view() for user entities.
  */
 function realname_user_view(array &$build, \Drupal\Core\Entity\EntityInterface $account, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display, $view_mode) {
   if ($display->getComponent('realname')) {
     if ($account->access('view')) {
-      $markup = l($account->realname, 'user/' . $account->id());
+      $url = Url::fromRoute('entity.user.canonical', ['user' => $account->id()]);
+      $markup = Link::fromTextAndUrl($account->realname, $url)->toString();
     }
     else {
       $markup = Html::escape($account->realname);
     }
 
     $build['realname'] = [
-      '#entity_type' => 'custom',
-      '#bundle' => 'custom',
-      '#field_type' => 'text',
       '#theme' => 'field',
-      '#field_name' => 'realname',
       '#title' => t('Real name'),
       '#label_display' => 'inline',
+      '#view_mode' => '_custom',
+      '#field_name' => 'realname',
+      '#field_type' => 'text',
+      '#field_translatable' => FALSE,
+      '#entity_type' => 'custom',
+      '#bundle' => 'custom',
+      '#object' => $account,
       '#items' => [TRUE],
+      '#is_multiple' => FALSE,
       0 => [
-        '#markup' => $markup
+        '#markup' => $markup,
       ],
     ];
   }
