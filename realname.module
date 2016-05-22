@@ -164,16 +164,6 @@ function realname_user_operations() {
 }
 
 /**
- * @TODO Implements hook_profile2_update().
- */
-function realname_profile2_update($profile) {
-  $account = user_load($profile->uid);
-  if (is_object($account)) {
-    realname_update($account);
-  }
-}
-
-/**
  * Callback function for admin mass generating user real names.
  *
  * @param array $uids
