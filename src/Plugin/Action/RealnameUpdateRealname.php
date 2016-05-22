@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains \Drupal\realname\Plugin\Action\RealnameUpdate.
+ * Contains \Drupal\realname\Plugin\Action\RealnameUpdateRealname.
  */
 
 namespace Drupal\realname\Plugin\Action;
@@ -19,7 +19,7 @@ use Drupal\Core\Session\AccountInterface;
  *   type = "user"
  * )
  */
-class RealnameUpdate extends ActionBase {
+class RealnameUpdateRealname extends ActionBase {
 
   /**
    * {@inheritdoc}
