@@ -24,7 +24,7 @@ use Drupal\user\Entity\User;
 function realname_help($route_name, RouteMatchInterface $route_match) {
   switch ($route_name) {
     // Main module help for the Realname module.
-    case 'admin/config/people/realname':
+    case 'realname.admin_settings_form':
     case 'help.page.realname':
       return '<p>' . t("A Real Name is what the site developer decides that users' names should look like. It is constructed from various tokens that are available within the site.") . '</p>';
   }
