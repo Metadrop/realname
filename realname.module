@@ -240,7 +240,7 @@ function realname_views_api() {
  * @return mixed
  *   The user's generated real name.
  */
-function realname_load(stdClass $account) {
+function realname_load(User $account) {
   $realnames = realname_load_multiple(array($account->id() => $account));
   return reset($realnames);
 }
