@@ -19,6 +19,6 @@
   },
   "license": "GPL-2.0+",
   "require": {
-    "drupal/token": "8.1.x-dev"
+    "drupal/token": "~8.0"
   }
 }
