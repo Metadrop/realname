@@ -185,7 +185,7 @@ function realname_load_multiple(array $accounts) {
 
   if ($new_accounts = array_diff_key($accounts, $realnames)) {
     // Attempt to fetch realnames from the database first.
-    $realnames += db_query("SELECT uid, realname FROM {realname} WHERE uid IN (:uids[])", array(':uids[]' => array_keys($new_accounts)))->fetchAllKeyed();
+    $realnames += \Drupal::database()->query("SELECT uid, realname FROM {realname} WHERE uid IN (:uids[])", array(':uids[]' => array_keys($new_accounts)))->fetchAllKeyed();
 
     // For each account that was not present in the database, generate its
     // real name.
@@ -235,7 +235,7 @@ function realname_update(User $account) {
   \Drupal::moduleHandler()->alter('realname', $realname, $account);
 
   // Save to the database and the static cache.
-  db_merge('realname')
+  \Drupal::database()->merge('realname')
     ->key(array('uid' => $account->id()))
     ->fields(array(
       'realname' => $realname,
@@ -267,7 +267,7 @@ function realname_delete($uid) {
  *   An array of user IDs.
  */
 function realname_delete_multiple(array $uids) {
-  db_delete('realname')->condition('uid', $uids, 'IN')->execute();
+  \Drupal::database()->delete('realname')->condition('uid', $uids, 'IN')->execute();
   drupal_static_reset('realname_load_multiple');
   \Drupal::entityTypeManager()->getStorage('user')->resetCache($uids);
 }
@@ -276,7 +276,7 @@ function realname_delete_multiple(array $uids) {
  * Delete all real names.
  */
 function realname_delete_all() {
-  db_truncate('realname')->execute();
+  \Drupal::database()->truncate('realname')->execute();
   drupal_static_reset('realname_load_multiple');
   \Drupal::entityTypeManager()->getStorage('user')->resetCache();
 }
@@ -297,19 +297,19 @@ function realname_autocomplete($field_name, $entity_type, $bundle_name, $string 
 
   // User entityreference autocomplete fields.
   if ($instance['widget']['type'] == 'entityreference_autocomplete' && !empty($string)) {
-    $query = db_select('users', 'u');
+    $query = \Drupal::database()->select('users', 'u');
     $query->leftJoin('realname', 'rn', 'u.uid = rn.uid');
     $query->fields('u', array('uid', 'name'));
     if ($instance['widget']['settings']['match_operator'] == 'CONTAINS') {
-      $query->condition(db_or()
-        ->condition('rn.realname', '%' . db_like($string) . '%', 'LIKE')
-        ->condition('u.name', '%' . db_like($string) . '%', 'LIKE')
+      $query->condition((new Condition('OR'))
+        ->condition('rn.realname', '%' . \Drupal::database()->escapeLike($string) . '%', 'LIKE')
+        ->condition('u.name', '%' . \Drupal::database()->escapeLike($string) . '%', 'LIKE')
       );
     }
     else {
-      $query->condition(db_or()
-        ->condition('rn.realname', db_like($string) . '%', 'LIKE')
-        ->condition('u.name', db_like($string) . '%', 'LIKE')
+      $query->condition((new Condition('OR'))
+        ->condition('rn.realname', \Drupal::database()->escapeLike($string) . '%', 'LIKE')
+        ->condition('u.name', \Drupal::database()->escapeLike($string) . '%', 'LIKE')
       );
     }
     $query->range(0, 10);
@@ -322,12 +322,12 @@ function realname_autocomplete($field_name, $entity_type, $bundle_name, $string 
   }
   // User autocomplete fields.
   elseif (!empty($string)) {
-    $query = db_select('users', 'u');
+    $query = \Drupal::database()->select('users', 'u');
     $query->leftJoin('realname', 'rn', 'u.uid = rn.uid');
     $query->fields('u', array('uid', 'name'));
-    $query->condition(db_or()
-      ->condition('rn.realname', db_like($string) . '%', 'LIKE')
-      ->condition('u.name', db_like($string) . '%', 'LIKE')
+    $query->condition((new Condition('OR'))
+      ->condition('rn.realname', \Drupal::database()->escapeLike($string) . '%', 'LIKE')
+      ->condition('u.name', \Drupal::database()->escapeLike($string) . '%', 'LIKE')
     );
     $query->range(0, 10);
     $uids = $query->execute()->fetchCol();
