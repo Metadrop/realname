@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\realname\Form\RealnameAdminSettingsForm.
- */
 
 namespace Drupal\realname\Form;
 

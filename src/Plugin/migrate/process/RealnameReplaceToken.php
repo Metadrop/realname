@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\realname\Plugin\migrate\process\RealnameReplaceToken.
- */
-
 namespace Drupal\realname\Plugin\migrate\process;
 
 use Drupal\migrate\ProcessPluginBase;

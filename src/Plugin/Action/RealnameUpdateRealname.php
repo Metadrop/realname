@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\realname\Plugin\Action\RealnameUpdateRealname.
- */
-
 namespace Drupal\realname\Plugin\Action;
 
 use Drupal\Core\Action\ActionBase;

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\realname\EventSubscriber\ConfigCacheTag.
- */
-
 namespace Drupal\realname\EventSubscriber;
 
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
