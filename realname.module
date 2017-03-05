@@ -269,7 +269,7 @@ function realname_delete($uid) {
 function realname_delete_multiple(array $uids) {
   db_delete('realname')->condition('uid', $uids, 'IN')->execute();
   drupal_static_reset('realname_load_multiple');
-  \Drupal::entityManager()->getStorage('user')->resetCache($uids);
+  \Drupal::entityTypeManager()->getStorage('user')->resetCache($uids);
 }
 
 /**
@@ -278,7 +278,7 @@ function realname_delete_multiple(array $uids) {
 function realname_delete_all() {
   db_truncate('realname')->execute();
   drupal_static_reset('realname_load_multiple');
-  \Drupal::entityManager()->getStorage('user')->resetCache();
+  \Drupal::entityTypeManager()->getStorage('user')->resetCache();
 }
 
 /**
