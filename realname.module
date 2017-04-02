@@ -11,6 +11,7 @@
 
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\Unicode;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
@@ -106,7 +107,7 @@ function realname_user_load(array $accounts) {
 /**
  * Implements hook_ENTITY_TYPE_update().
  */
-function realname_user_update(Drupal\Core\Entity\EntityInterface $account) {
+function realname_user_update(EntityInterface $account) {
   // Since user data may have changed, update the realname and its cache.
   $realnames = &drupal_static('realname_load_multiple', array());
   $realnames[$account->id()] = realname_update($account);
@@ -115,14 +116,14 @@ function realname_user_update(Drupal\Core\Entity\EntityInterface $account) {
 /**
  * Implements hook_ENTITY_TYPE_delete().
  */
-function realname_user_delete(Drupal\Core\Entity\EntityInterface $account) {
+function realname_user_delete(EntityInterface $account) {
   realname_delete($account->id());
 }
 
 /**
  * Implements hook_ENTITY_TYPE_view() for user entities.
  */
-function realname_user_view(array &$build, \Drupal\Core\Entity\EntityInterface $account, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display, $view_mode) {
+function realname_user_view(array &$build, EntityInterface $account, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display, $view_mode) {
   if ($display->getComponent('realname')) {
     if ($account->access('view')) {
       $url = Url::fromRoute('entity.user.canonical', ['user' => $account->id()]);

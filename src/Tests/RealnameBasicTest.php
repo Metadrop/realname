@@ -40,8 +40,6 @@ class RealnameBasicTest extends WebTestBase {
     // User to set up realname.
     $this->admin_user = $this->drupalCreateUser($permissions);
     $this->drupalLogin($this->admin_user);
-    //$this->verbose('<pre>' . print_r($this->admin_user, TRUE) . '</pre>');
-    //$this->verbose('<pre>' . print_r($this->drupalLogin($this->admin_user, TRUE)) . '</pre>');
   }
 
   /**
