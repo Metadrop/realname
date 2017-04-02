@@ -107,7 +107,7 @@ class RealnameBasicTest extends WebTestBase {
 
     // Make realname field visible on user page.
     $this->drupalGet('admin/config/people/accounts/display');
-    $edit = array('fields[realname][type]' => 'visible');
+    $edit = array('fields[realname][region]' => 'content');
     $this->drupalPostForm(NULL, $edit, t('Save'));
     $this->assertResponse(200);
 
