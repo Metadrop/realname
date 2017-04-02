@@ -11,6 +11,7 @@
 
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\Unicode;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -41,19 +42,19 @@ function realname_help($route_name, RouteMatchInterface $route_match) {
 function realname_menu_alter(&$items) {
   // Implement realname autocomplete.
   $items['user/autocomplete']['page callback'] = 'realname_autocomplete';
-  $items['user/autocomplete']['page arguments'] = array('', '', 2);
+  $items['user/autocomplete']['page arguments'] = ['', '', 2];
 }
 
 /**
  * Implements hook_entity_extra_field_info().
  */
 function realname_entity_extra_field_info() {
-  $fields['user']['user']['display']['realname'] = array(
+  $fields['user']['user']['display']['realname'] = [
     'label' => t('Real name'),
     'description' => t('Real name'),
     'weight' => -1,
     'visible' => FALSE,
-  );
+  ];
 
   return $fields;
 }
@@ -109,7 +110,7 @@ function realname_user_load(array $accounts) {
  */
 function realname_user_update(EntityInterface $account) {
   // Since user data may have changed, update the realname and its cache.
-  $realnames = &drupal_static('realname_load_multiple', array());
+  $realnames = &drupal_static('realname_load_multiple', []);
   $realnames[$account->id()] = realname_update($account);
 }
 
@@ -123,7 +124,7 @@ function realname_user_delete(EntityInterface $account) {
 /**
  * Implements hook_ENTITY_TYPE_view() for user entities.
  */
-function realname_user_view(array &$build, EntityInterface $account, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display, $view_mode) {
+function realname_user_view(array &$build, EntityInterface $account, EntityViewDisplayInterface $display, $view_mode) {
   if ($display->getComponent('realname')) {
     if ($account->access('view')) {
       $url = Url::fromRoute('entity.user.canonical', ['user' => $account->id()]);
@@ -168,7 +169,7 @@ function realname_user_view(array &$build, EntityInterface $account, \Drupal\Cor
  *   The user's generated real name.
  */
 function realname_load(User $account) {
-  $realnames = realname_load_multiple(array($account->id() => $account));
+  $realnames = realname_load_multiple([$account->id() => $account]);
   return reset($realnames);
 }
 
@@ -182,11 +183,11 @@ function realname_load(User $account) {
  *   An array of real names keyed by user ID.
  */
 function realname_load_multiple(array $accounts) {
-  $realnames = &drupal_static(__FUNCTION__, array());
+  $realnames = &drupal_static(__FUNCTION__, []);
 
   if ($new_accounts = array_diff_key($accounts, $realnames)) {
     // Attempt to fetch realnames from the database first.
-    $realnames += \Drupal::database()->query("SELECT uid, realname FROM {realname} WHERE uid IN (:uids[])", array(':uids[]' => array_keys($new_accounts)))->fetchAllKeyed();
+    $realnames += \Drupal::database()->query("SELECT uid, realname FROM {realname} WHERE uid IN (:uids[])", [':uids[]' => array_keys($new_accounts)])->fetchAllKeyed();
 
     // For each account that was not present in the database, generate its
     // real name.
@@ -220,7 +221,7 @@ function realname_update(User $account) {
   \Drupal::moduleHandler()->alter('realname_pattern', $pattern, $account);
 
   // Perform token replacement on the real name pattern.
-  $realname = \Drupal::token()->replace($pattern, array('user' => $account), array('clear' => TRUE, 'sanitize' => FALSE));
+  $realname = \Drupal::token()->replace($pattern, ['user' => $account], ['clear' => TRUE, 'sanitize' => FALSE]);
 
   // Remove any HTML tags.
   $realname = strip_tags(Html::decodeEntities($realname));
@@ -237,15 +238,15 @@ function realname_update(User $account) {
 
   // Save to the database and the static cache.
   \Drupal::database()->merge('realname')
-    ->key(array('uid' => $account->id()))
-    ->fields(array(
+    ->key(['uid' => $account->id()])
+    ->fields([
       'realname' => $realname,
       'created' => REQUEST_TIME,
-    ))
+    ])
     ->execute();
 
   // Allow modules to react to the realname being updated.
-  \Drupal::moduleHandler()->invokeAll('realname_update', array($realname, $account));
+  \Drupal::moduleHandler()->invokeAll('realname_update', [$realname, $account]);
 
   $account->setUsername($realname);
   return $realname;
@@ -258,7 +259,7 @@ function realname_update(User $account) {
  *   A user ID.
  */
 function realname_delete($uid) {
-  return realname_delete_multiple(array($uid));
+  return realname_delete_multiple([$uid]);
 }
 
 /**
@@ -294,13 +295,13 @@ function realname_delete_all() {
  */
 function realname_autocomplete($field_name, $entity_type, $bundle_name, $string = '') {
   $instance = field_info_instance($entity_type, $field_name, $bundle_name);
-  $matches = array();
+  $matches = [];
 
   // User entityreference autocomplete fields.
   if ($instance['widget']['type'] == 'entityreference_autocomplete' && !empty($string)) {
     $query = \Drupal::database()->select('users', 'u');
     $query->leftJoin('realname', 'rn', 'u.uid = rn.uid');
-    $query->fields('u', array('uid', 'name'));
+    $query->fields('u', ['uid', 'name']);
     if ($instance['widget']['settings']['match_operator'] == 'CONTAINS') {
       $query->condition((new Condition('OR'))
         ->condition('rn.realname', '%' . \Drupal::database()->escapeLike($string) . '%', 'LIKE')
@@ -318,14 +319,14 @@ function realname_autocomplete($field_name, $entity_type, $bundle_name, $string 
     $accounts = user_load_multiple($uids);
 
     foreach ($accounts as $account) {
-      $matches[t('!account (@uid)', array('!account' => format_username($account), '@uid' => $account->uid))] = t('!realname (@username)', array('!realname' => format_username($account), '@username' => $account->name));
+      $matches[t('!account (@uid)', ['!account' => format_username($account), '@uid' => $account->uid])] = t('!realname (@username)', ['!realname' => format_username($account), '@username' => $account->name]);
     }
   }
   // User autocomplete fields.
   elseif (!empty($string)) {
     $query = \Drupal::database()->select('users', 'u');
     $query->leftJoin('realname', 'rn', 'u.uid = rn.uid');
-    $query->fields('u', array('uid', 'name'));
+    $query->fields('u', ['uid', 'name']);
     $query->condition((new Condition('OR'))
       ->condition('rn.realname', \Drupal::database()->escapeLike($string) . '%', 'LIKE')
       ->condition('u.name', \Drupal::database()->escapeLike($string) . '%', 'LIKE')
@@ -335,7 +336,7 @@ function realname_autocomplete($field_name, $entity_type, $bundle_name, $string 
     $accounts = user_load_multiple($uids);
 
     foreach ($accounts as $account) {
-      $matches[$account->name] = t('!realname (@username)', array('!realname' => format_username($account), '@username' => $account->name));
+      $matches[$account->name] = t('!realname (@username)', ['!realname' => format_username($account), '@username' => $account->name]);
     }
   }
 
