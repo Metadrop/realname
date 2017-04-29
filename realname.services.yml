@@ -4,3 +4,8 @@ services:
     arguments: ['@cache_tags.invalidator']
     tags:
       - { name: event_subscriber }
+
+  realname.route.subscriber:
+    class: Drupal\realname\Routing\RealnameRouteSubscriber
+    tags:
+      - { name: event_subscriber }
