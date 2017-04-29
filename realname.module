@@ -204,26 +204,34 @@ function realname_load_multiple(array $accounts) {
  * @see hook_realname_update()
  */
 function realname_update(User $account) {
-  // Get the default pattern and allow other modules to alter it.
-  $config = \Drupal::config('realname.settings');
-  $pattern = $config->get('pattern');
-  \Drupal::moduleHandler()->alter('realname_pattern', $pattern, $account);
+  $realname = '';
 
-  // Perform token replacement on the real name pattern.
-  $realname = \Drupal::token()->replace($pattern, ['user' => $account], ['clear' => TRUE, 'sanitize' => FALSE]);
+  if (!$account->isAnonymous()) {
+    // Get the default pattern and allow other modules to alter it.
+    $config = \Drupal::config('realname.settings');
+    $pattern = $config->get('pattern');
+    \Drupal::moduleHandler()->alter('realname_pattern', $pattern, $account);
 
-  // Remove any HTML tags.
-  $realname = strip_tags(Html::decodeEntities($realname));
+    // Perform token replacement on the real name pattern.
+    $realname = \Drupal::token()->replace($pattern, ['user' => $account], ['clear' => TRUE, 'sanitize' => FALSE]);
 
-  // Remove double spaces (if a token had no value).
-  $realname = preg_replace('/ {2,}/', ' ', $realname);
+    // Remove any HTML tags.
+    $realname = strip_tags(Html::decodeEntities($realname));
 
-  // The name must be trimmed to 255 characters before inserting into the
-  // database.
-  $realname = Unicode::truncate(trim($realname), 255);
+    // Remove double spaces (if a token had no value).
+    $realname = preg_replace('/ {2,}/', ' ', $realname);
 
-  // Allow other modules to alter the generated realname.
-  \Drupal::moduleHandler()->alter('realname', $realname, $account);
+    // The name must be trimmed to 255 characters before inserting into the
+    // database.
+    $realname = Unicode::truncate(trim($realname), 255);
+
+    // Allow other modules to alter the generated realname.
+    \Drupal::moduleHandler()->alter('realname', $realname, $account);
+  }
+  else {
+    // DisplayName cannot generated with tokens for anonymous users.
+    $realname = $account->label();
+  }
 
   // Save to the database and the static cache.
   \Drupal::database()->merge('realname')
