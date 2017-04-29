@@ -72,7 +72,7 @@ class RealnameAutocompleteController extends EntityAutocompleteController {
       $connection = \Drupal::database();
       $query = $connection->select('users_field_data', 'u');
       $query->fields('u', ['uid']);
-      $query->join('realname', 'rn', 'u.uid = rn.uid');
+      $query->leftJoin('realname', 'rn', 'u.uid = rn.uid');
       if ($match_operator == 'CONTAINS') {
         $query->condition((new Condition('OR'))
           ->condition('rn.realname', '%' . $connection->escapeLike($string) . '%', 'LIKE')
