@@ -68,6 +68,7 @@ class RealnameAutocompleteController extends EntityAutocompleteController {
     if (isset($string)) {
       // Get an array of matching entities.
       $match_operator = !empty($selection_settings['match_operator']) ? $selection_settings['match_operator'] : 'CONTAINS';
+      $include_anonymous = isset($selection_settings['include_anonymous']) ? $selection_settings['include_anonymous'] : TRUE;
 
       $connection = \Drupal::database();
       $query = $connection->select('users_field_data', 'u');
@@ -84,6 +85,9 @@ class RealnameAutocompleteController extends EntityAutocompleteController {
           ->condition('rn.realname', $connection->escapeLike($string) . '%', 'LIKE')
           ->condition('u.name', $connection->escapeLike($string) . '%', 'LIKE')
         );
+      }
+      if ($include_anonymous == FALSE) {
+        $query->condition('u.uid', 0, '>');
       }
       $query->range(0, 10);
       $uids = $query->execute()->fetchCol();
