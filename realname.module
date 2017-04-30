@@ -249,6 +249,12 @@ function realname_update(User $account) {
   if (Unicode::strlen($realname)) {
     $account->setUsername($realname);
   }
+
+  // Clear the entity cache.
+  /** @var \Drupal\user\UserStorageInterface $user_storage */
+  $user_storage = \Drupal::getContainer()->get('entity.manager')->getStorage('user');
+  $user_storage->resetCache([$account->id()]);
+
   return $realname;
 }
 
