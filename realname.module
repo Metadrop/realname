@@ -246,7 +246,7 @@ function realname_update(User $account) {
   \Drupal::moduleHandler()->invokeAll('realname_update', [$realname, $account]);
 
   // Only if the real name is a non-empty string the name is altered.
-  if (!empty($realname)) {
+  if (Unicode::strlen($realname)) {
     $account->setUsername($realname);
   }
   return $realname;
