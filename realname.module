@@ -221,12 +221,12 @@ function realname_update(User $account) {
     // Remove double spaces (if a token had no value).
     $realname = preg_replace('/ {2,}/', ' ', $realname);
 
+    // Allow other modules to alter the generated realname.
+    \Drupal::moduleHandler()->alter('realname', $realname, $account);
+
     // The name must be trimmed to 255 characters before inserting into the
     // database.
     $realname = Unicode::truncate(trim($realname), 255);
-
-    // Allow other modules to alter the generated realname.
-    \Drupal::moduleHandler()->alter('realname', $realname, $account);
   }
   else {
     // DisplayName cannot generated with tokens for anonymous users.
