@@ -96,8 +96,8 @@ class RealnameAutocompleteController extends EntityAutocompleteController {
       /* @var $account User */
       foreach ($accounts as $account) {
         $matches[] = [
-          'value' => t('@realname (@id)', ['@realname' => realname_load($account), '@id' => $account->id()]),
-          'label' => t('@realname', ['@realname' => realname_load($account)]),
+          'value' => t('@realname (@id)', ['@realname' => $account->getDisplayName(), '@id' => $account->id()]),
+          'label' => t('@realname', ['@realname' => $account->getDisplayName()]),
         ];
       }
     }
