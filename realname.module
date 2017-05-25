@@ -176,7 +176,7 @@ function realname_load_multiple(array $accounts) {
 
   if ($new_accounts = array_diff_key($accounts, $realnames)) {
     // Attempt to fetch realnames from the database first.
-    $realnames += \Drupal::database()->query("SELECT uid, realname FROM {realname} WHERE uid IN (:uids)", [':uids' => array_keys($new_accounts)])->fetchAllKeyed();
+    $realnames += \Drupal::database()->query("SELECT uid, realname FROM {realname} WHERE uid IN (:uids[])", [':uids[]' => array_keys($new_accounts)])->fetchAllKeyed();
 
     // For each account that was not present in the database, generate its
     // real name.
