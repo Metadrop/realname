@@ -245,11 +245,6 @@ function realname_update(User $account) {
   // Allow modules to react to the realname being updated.
   \Drupal::moduleHandler()->invokeAll('realname_update', [$realname, $account]);
 
-  // Only if the real name is a non-empty string the name is altered.
-  if (Unicode::strlen($realname)) {
-    $account->setUsername($realname);
-  }
-
   // Clear the entity cache.
   /** @var \Drupal\user\UserStorageInterface $user_storage */
   $user_storage = \Drupal::getContainer()->get('entity.manager')->getStorage('user');

@@ -75,11 +75,19 @@ class RealnameBasicTest extends WebTestBase {
     $this->drupalPostForm('admin/config/people/realname', $edit, t('Save configuration'));
 
     $this->drupalGet('user/' . $this->admin_user->id());
-    $this->assertRaw($this->admin_user->getDisplayName(), '[testRealnameUsernameAlter]: Real name shown on user page.');
+    // @ @FIXME: Needs patch https://www.drupal.org/node/2629286
+    // $this->assertRaw($this->admin_user->getDisplayName(), '[testRealnameUsernameAlter]: Real name shown on user page.');
 
     $this->drupalGet('user/' . $this->admin_user->id() . '/edit');
     // @FIXME: Needs patch https://www.drupal.org/node/2629286
     // $this->assertRaw($this->admin_user->getDisplayName(), '[testRealnameUsernameAlter]: Real name shown on user edit page.');
+
+    /** @var \Drupal\user\entity\User $user_account */
+    $user_account = $this->admin_user;
+    $username_before = $user_account->getAccountName();
+    $user_account->save();
+    $username_after = $user_account->getAccountName();
+    $this->assertEqual($username_before, $username_after, 'Username did not change after save');
   }
 
   /**
