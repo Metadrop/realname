@@ -15,7 +15,7 @@
   ],
   "support": {
     "issues": "https://www.drupal.org/project/issues/realname",
-    "source": "http://git.drupal.org/project/realname.git"
+    "source": "https://git.drupal.org/project/realname.git"
   },
   "license": "GPL-2.0+",
   "require": {
