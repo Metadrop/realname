@@ -151,7 +151,7 @@ function realname_user_view(array &$build, EntityInterface $account, EntityViewD
 /**
  * Loads a real name.
  *
- * @param object $account
+ * @param Drupal\user\Entity\User $account
  *   A user account object.
  *
  * @return mixed
@@ -193,7 +193,7 @@ function realname_load_multiple(array $accounts) {
 /**
  * Update the realname for a user account.
  *
- * @param object $account
+ * @param Drupal\user\Entity\User $account
  *   A user account object.
  *
  * @return string
