@@ -238,7 +238,7 @@ function realname_update(User $account) {
     ->key(['uid' => $account->id()])
     ->fields([
       'realname' => $realname,
-      'created' => REQUEST_TIME,
+      'created' => \Drupal::time()->getRequestTime(),
     ])
     ->execute();
 
