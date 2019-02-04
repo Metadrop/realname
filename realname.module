@@ -62,7 +62,7 @@ function realname_user_format_name_alter(&$name, $account) {
 
   // Real name was loaded/generated via hook_user_load(), so re-use it.
   if (isset($account->realname)) {
-    if (Unicode::strlen($account->realname)) {
+    if (mb_strlen($account->realname)) {
       // Only if the real name is a non-empty string is $name actually altered.
       $name = $account->realname;
     }
