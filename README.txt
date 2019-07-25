@@ -1,5 +1,6 @@
-CONTENTS OF THIS FILE
----------------------
+# Realname
+
+## CONTENTS OF THIS FILE
 
 * Introduction
 * Requirements
@@ -8,8 +9,7 @@ CONTENTS OF THIS FILE
 * Maintainers
 
 
-INTRODUCTION
-------------
+## INTRODUCTION
 
 The Real name module allows the admin to choose fields from the user profile
 that will be used to add a "realname" element (method) to a user object.
@@ -23,24 +23,21 @@ Hook_user is used to automatically add this to any user object that is loaded.
   https://www.drupal.org/project/issues/realname.
 
 
-REQUIREMENTS
-------------
+## REQUIREMENTS
 
 This module requires the following module:
 
  * Token - https://www.drupal.org/project/token
 
 
-INSTALLATION
-------------
+## INSTALLATION
 
 Install the Real name module as you would normally install a contributed
 Drupal module. Visit https://www.drupal.org/node/1897420 for further
 information.
 
 
-CONFIGURATION
--------------
+## CONFIGURATION
 
 The settings page is at Administration >> Configuration >> People >> Real name.
 
@@ -49,7 +46,6 @@ Note that if the pattern is changed: all current Realnames will be deleted and
 the list in the database will be rebuilt as needed.
 
 
-MAINTAINERS
------------
+## MAINTAINERS
 
 * Alexander Hass (hass) - https://www.drupal.org/u/hass
