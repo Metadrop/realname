@@ -1,4 +1,4 @@
-name: 'Real name'
+name: 'Real Name'
 type: module
 description: 'Provides token-based name displays for users.'
 configure: realname.admin_settings_form
