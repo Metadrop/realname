@@ -5,7 +5,6 @@ namespace Drupal\realname\Controller;
 use Drupal\system\Controller\EntityAutocompleteController;
 use Drupal\Component\Utility\Crypt;
 use Drupal\Component\Utility\Tags;
-use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Database\Query\Condition;
 use Drupal\Core\Site\Settings;
 use Drupal\user\Entity\User;
@@ -62,7 +61,7 @@ class RealnameAutocompleteController extends EntityAutocompleteController {
    * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
    *   Thrown when the current user doesn't have access to the specified entity.
    */
-  protected function getMatches($selection_settings, $string = '') {
+  protected function getMatches(array $selection_settings, $string = '') {
     $matches = [];
 
     if (isset($string)) {
@@ -96,8 +95,8 @@ class RealnameAutocompleteController extends EntityAutocompleteController {
       /* @var $account User */
       foreach ($accounts as $account) {
         $matches[] = [
-          'value' => t('@realname (@id)', ['@realname' => $account->getDisplayName(), '@id' => $account->id()]),
-          'label' => t('@realname (@username)', ['@realname' => $account->getDisplayName(), '@username' => $account->getAccountName()]),
+          'value' => $this->t('@realname (@id)', ['@realname' => $account->getDisplayName(), '@id' => $account->id()]),
+          'label' => $this->t('@realname (@username)', ['@realname' => $account->getDisplayName(), '@username' => $account->getAccountName()]),
         ];
       }
     }
