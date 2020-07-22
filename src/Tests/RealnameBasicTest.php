@@ -3,6 +3,7 @@
 namespace Drupal\realname\Tests;
 
 use Drupal\simpletest\WebTestBase;
+use Drupal\Tests\BrowserTestBase;
 use Drupal\user\Entity\User;
 
 /**
@@ -10,7 +11,7 @@ use Drupal\user\Entity\User;
  *
  * @group Realname
  */
-class RealnameBasicTest extends WebTestBase {
+class RealnameBasicTest extends BrowserTestBase {
 
   /**
    * {@inheritdoc}

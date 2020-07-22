@@ -248,7 +248,7 @@ function realname_update(User $account) {
 
   // Clear the entity cache.
   /** @var \Drupal\user\UserStorageInterface $user_storage */
-  $user_storage = \Drupal::getContainer()->get('entity.manager')->getStorage('user');
+  $user_storage = \Drupal::entityTypeManager()->getStorage('user');
   $user_storage->resetCache([$account->id()]);
 
   return $realname;
@@ -261,7 +261,7 @@ function realname_update(User $account) {
  *   A user ID.
  */
 function realname_delete($uid) {
-  return realname_delete_multiple([$uid]);
+  realname_delete_multiple([$uid]);
 }
 
 /**
@@ -288,3 +288,4 @@ function realname_delete_all() {
 /**
  * @} End of "addtogroup realname".
  */
+
